@@ -2,13 +2,22 @@
 const express = require("express");
 const path = require("path");
 const router = express.Router();
+const pdfDisc = require('./pdfDisc');
 
 // get the home page 
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-
+//find all the pdfs 
+router.get('/pdfs', (req, res) => {
+  pdfDisc.PDFList((err, pdfList) => {
+    if (err) {
+      return console.error('PDF :', err);
+    }
+    res.json(pdfList);
+  });
+});
 
 // geting the pdfs
 router.get("/pdf/Dog", (req, res) => {
