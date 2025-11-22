@@ -1,4 +1,10 @@
-// pdfDisc.js
+/* pdfDisc.js module provides 
+that it searches for available PDF documents in a designated folder
+The module scans the pdfs folder and create a list of available PDFs
+This list is to be used to display available PDFs on the website
+The module handles file system operations to read directory contents
+it caches the PDF list to avoid repeated file system reads
+*/
 const fs = require('fs');
 const path = require('path');
 
