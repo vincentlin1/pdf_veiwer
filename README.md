@@ -1,7 +1,5 @@
 # pdf_veiwer
 
-# Wild West Forum (midterm Project)
-
 This is a simple Node.js + Express + Handlebars app using Docker and Nginx. 
 
 
