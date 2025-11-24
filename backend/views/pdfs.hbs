@@ -1,0 +1,30 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFs</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    {{> nav}}
+
+
+    <main class="container">
+        <h1>Available PDFs</h1>
+            <ul>
+                <!--for each pdfs get the title filename description and allow then to view or download-->
+                {{#each result}}
+                <li>
+                    <h3>{{title}} ({{filename}})</h3>
+                    <p>{{description}}</p>
+                    <a href="/pdfs/{{filename}}">View</a>
+                    <a href="/pdfs/{{filename}}/download">Download</a>
+                </li>
+                {{/each}}
+            </ul>
+    </main>
+
+
+    {{> footer}}
+</body>
+</html>

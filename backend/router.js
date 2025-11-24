@@ -4,38 +4,64 @@ const path = require("path");
 const router = express.Router();
 const pdfDisc = require('./pdfDisc');
 const {validatePDF} = require('./pdfValid')
+const { loadMetadata } = require("./pdfMeta");
 
 
-// get the home page 
+
+// Home page
 router.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.render("home");
 });
 
-//find all the pdfs 
+
+//find all the pdfs then send the json
 router.get('/pdfs', (req, res) => {
   //gets the pdf list
   pdfDisc.PDFList((err, pdfList) => {
     if (err) {
-      return res.status(404).json({ error: "PDF list error" });
+      return res.render("404");
     }
+    //maps each pdflist with their meta data and makes an object for website handling 
+    const result = pdfList.map(pdfFileName => {
+      //gets metadata
+      const meta = loadMetadata(pdfFileName);
+      //result = {filename,title,description}
+      return {
+        filename: pdfFileName,
+        title: meta.title,
+        description: meta.description
+      };
+    });
     //sends the reslut
-    res.json(pdfList);
+    res.render("pdfs", { result });
   });
 });
 
 // geting the pdfs
 router.get('/pdfs/:fileName', (req, res) => {
     const pdfName = req.params.fileName;
-
-    //validate the pdf if it exists then send the file if error then send 404 error
+  
+//validate the pdf if it exists then send the file if error then send 404 error
     validatePDF(pdfName, (err, validPath) => {
         if (err) {
-            return res.status(404).json({ error: "PDF not found" });
+            return res.status(404).render("404");
         }
         res.sendFile(validPath);
     });
 });
+//if user want to download the file then validate and download
+router.get('/pdfs/:fileName/download', (req, res) => {
+    const pdfName = req.params.fileName;
 
+    validatePDF(pdfName, (err, validPath) => {
+        if (err) {
+            return res.status(404).render("404");
+        }
+        res.download(validPath, pdfName, (downloadErr) => {
+            if (downloadErr) console.error("Download error:", downloadErr);
+        });
+    });
+});
 
 
 // router.get("/pdf/Dog", (req, res) => {
@@ -51,9 +77,9 @@ router.get('/pdfs/:fileName', (req, res) => {
 // });
 
 
-// 404 HANDLER FOR THIS MODULE
+// 404
 router.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
+  res.status(404).render("404");
 });
 
 module.exports = router;

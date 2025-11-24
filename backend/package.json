@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/vincentlin1/pdf_veiwer#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "hbs": "^4.2.0"
+
   }
 }

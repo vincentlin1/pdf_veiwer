@@ -6,20 +6,20 @@ const path = require('path');
 const PDF_FOLDER = path.join(__dirname, 'pdfs');
 
 
-// pdfNameString: the filename supplied by the user
-function validatePDF(pdfNameString, callback) {
+// filename: the filename supplied by the user
+function validatePDF(filename, callback) {
 
     // if there is nothing sent send back error
-    if (!pdfNameString) {
+    if (!filename) {
         return callback(err, null);
     }
 
     // make it so it just the base name (aka .../pdfs/dog.pdf returns /dog.pdf)
     //should prevent any tarverals
     //found here https://www.w3schools.com/nodejs/met_path_basename.asp
-    const safeName = path.basename(pdfNameString);
+    const safeName = path.basename(filename);
 
-    // build the file path only which i allow 
+    // build the file path only which I allow 
     const fullPath = path.join(PDF_FOLDER, safeName);
 
     // make sure the path stays inside the pdf folder
